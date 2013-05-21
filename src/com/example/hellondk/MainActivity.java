@@ -26,7 +26,7 @@ public class MainActivity extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		tv1 = (TextView)findViewById(R.id.textView1);
 		tv1.setText("0");
 		tv2 = (TextView)findViewById(R.id.textView2);
@@ -139,17 +139,19 @@ public class MainActivity extends SherlockActivity {
 				tv1.setVisibility(View.GONE);
 				tv3.setVisibility(View.GONE);
 				btn.setEnabled(false);
-				start = System.currentTimeMillis();
 			}
 
 			@Override
 			protected Long doInBackground(Integer... params) {
-				return fibo(params[0]);
+				long ret;
+				start = System.currentTimeMillis();
+				ret = fibo(params[0]);
+				end = System.currentTimeMillis();
+				return ret;
 			}
 			
 			@Override
 			protected void onPostExecute(Long result) {
-				end = System.currentTimeMillis();
 				tv1.setVisibility(View.VISIBLE);
 				tv3.setVisibility(View.VISIBLE);
 				btn.setEnabled(true);
@@ -175,17 +177,19 @@ public class MainActivity extends SherlockActivity {
 				tv2.setVisibility(View.GONE);
 				tv4.setVisibility(View.GONE);
 				btn.setEnabled(false);
-				start = System.currentTimeMillis();
 			}
 			
 			@Override
 			protected Long doInBackground(Integer... params) {
-				return fiboCpp(params[0]);
+				long ret;
+				start = System.currentTimeMillis();
+				ret = fiboCpp(params[0]);
+				end = System.currentTimeMillis();
+				return ret;
 			}
 
 			@Override
 			protected void onPostExecute(Long result) {
-				end = System.currentTimeMillis();
 				tv2.setVisibility(View.VISIBLE);
 				tv4.setVisibility(View.VISIBLE);
 				btn.setEnabled(true);
