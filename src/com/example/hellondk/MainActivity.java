@@ -20,7 +20,7 @@ import android.widget.Toast;
 public class MainActivity extends SherlockActivity {
 
 	final int CUSTOM_DIALOG = 1;
-	TextView tv1,tv2;
+	TextView tv1,tv2,tv3,tv4;
 	int n = 35;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,10 @@ public class MainActivity extends SherlockActivity {
 		tv1.setText("0");
 		tv2 = (TextView)findViewById(R.id.textView2);
 		tv2.setText("0");
+		tv3 = (TextView)findViewById(R.id.textView3);
+		tv3.setText("");
+		tv4 = (TextView)findViewById(R.id.textView4);
+		tv4.setText("");
 		
 		findViewById(R.id.fibo).setOnClickListener( new View.OnClickListener() {
 			
@@ -56,6 +60,8 @@ public class MainActivity extends SherlockActivity {
 			public void onClick(View v) {
 				tv1.setText("0");
 				tv2.setText("0");
+				tv3.setVisibility(View.GONE);
+				tv4.setVisibility(View.GONE);
 			}
 		});
 		
@@ -121,17 +127,19 @@ public class MainActivity extends SherlockActivity {
 		}
 	}
 
-	private void fiboJava(int n) {
-		final ProgressBar bar = (ProgressBar)findViewById(R.id.progressBar1);
-		final Button btn = (Button)findViewById(R.id.fibo);
-		AsyncTask<Integer, Void, Long> task = new AsyncTask<Integer, Void, Long>(){
+	private void fiboJava(final int n) {
+		AsyncTask<Integer, Void, Long> task = new AsyncTask<Integer, Void, Long>() {
 			
-			
+			long start, end;
+			ProgressBar bar = (ProgressBar)findViewById(R.id.progressBar1);
+			Button btn = (Button)findViewById(R.id.fibo);
 			@Override
 			protected void onPreExecute() {
 				bar.setVisibility(View.VISIBLE);
 				tv1.setVisibility(View.GONE);
+				tv3.setVisibility(View.GONE);
 				btn.setEnabled(false);
+				start = System.currentTimeMillis();
 			}
 
 			@Override
@@ -141,25 +149,33 @@ public class MainActivity extends SherlockActivity {
 			
 			@Override
 			protected void onPostExecute(Long result) {
+				end = System.currentTimeMillis();
 				tv1.setVisibility(View.VISIBLE);
+				tv3.setVisibility(View.VISIBLE);
 				btn.setEnabled(true);
 				bar.setVisibility(View.GONE);
-				tv1.setText(String.valueOf(result));
+				tv1.setText(String.valueOf((end - start) + "ms"));
+				tv3.setText(String.valueOf( "[ N = " + n + ", fibo(" + n + ") = " + result+" ]"));
+				
 			}
 		};
 		task.execute(n);
 	}
 
-	private void fiboNative(int n) {
-		final ProgressBar bar = (ProgressBar)findViewById(R.id.progressBar2);
-		final Button btn = (Button)findViewById(R.id.fibo_native);
+	private void fiboNative(final int n) {
 		AsyncTask<Integer, Void, Long> task = new AsyncTask<Integer, Void, Long>(){
+			
+			long start, end;
+			final ProgressBar bar = (ProgressBar)findViewById(R.id.progressBar2);
+			final Button btn = (Button)findViewById(R.id.fibo_native);
 			
 			@Override
 			protected void onPreExecute() {
 				bar.setVisibility(View.VISIBLE);
 				tv2.setVisibility(View.GONE);
+				tv4.setVisibility(View.GONE);
 				btn.setEnabled(false);
+				start = System.currentTimeMillis();
 			}
 			
 			@Override
@@ -169,11 +185,13 @@ public class MainActivity extends SherlockActivity {
 
 			@Override
 			protected void onPostExecute(Long result) {
+				end = System.currentTimeMillis();
 				tv2.setVisibility(View.VISIBLE);
+				tv4.setVisibility(View.VISIBLE);
 				btn.setEnabled(true);
 				bar.setVisibility(View.GONE);
-				tv2.setText(String.valueOf(result));
-			}
+				tv2.setText(String.valueOf((end - start) + "ms"));
+				tv4.setText(String.valueOf( "[ N = " + n + ", fibo(" + n + ") = " + result+" ]"));			}
 		};
 		task.execute(n);
 	}
